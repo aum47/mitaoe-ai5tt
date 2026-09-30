@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI5 Timetable · FY BTech 2026-27</title>
 <meta name="theme-color" content="#1d3a5f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AI5 TT">
 <style>
 :root{--bg:#f3f5f8;--card:#fff;--ink:#14202e;--mute:#5d6b7c;--line:#dde3ea;--navy:#1d3a5f;
 --th:#2f6fb5;--lab:#1f8a5b;--tut:#c7811a;--now:#fff4d6}
@@ -51,7 +55,7 @@ footer{max-width:720px;margin:10px auto 0;padding:0 16px;font-size:.78rem;color:
 </div></div></header>
 <nav><div class="wrap" id="tabs"></div></nav>
 <main class="wrap" id="out"></main>
-<footer>Built from the official class-wise timetable (Format ACAD/DI/05). Check the original PDF if anything looks off.</footer>
+<footer>Works offline after the first visit. Built from the official class-wise timetable (Format ACAD/DI/05). Check the original PDF if anything looks off.</footer>
 <script>
 const SUB={
 CLA:["Linear Algebra & Multivariable Calculus"],DELD:["Digital Electronics & Logic"],PFC:["Physics for Computing"],
@@ -95,16 +99,18 @@ function day(d,live){
  let h=banner(l,live),pe=null;
  l.forEach(e=>{const s=mins(e[0]);
   if(pe!==null&&s-pe>=20)h+=(pe===740&&s===795)?`<div class="gap">Lunch break \u00b7 ${hm(pe)} \u2013 ${hm(s)}</div>`:`<div class="gap free">Free for ${dur(s-pe)} \u00b7 ${hm(pe)} \u2013 ${hm(s)}${pe<=740&&s>=795?" (includes lunch)":""}</div>`;
+  if(pe!==null&&s>pe&&s-pe<20)h+=`<div class="gap">Short break \u00b7 ${s-pe} min \u00b7 ${hm(pe)} \u2013 ${hm(s)}</div>`;
   let lab="";if(e===nowE)lab=`Happening now \u00b7 ends in ${dur(mins(e[1])-cur)}`;else if(e===nxt)lab=`Up next \u00b7 starts in ${dur(s-cur)}`;
   h+=card(e,lab,e===nowE);pe=Math.max(pe||0,mins(e[1]))});
  return h}
 function wk(d){const l=list(d);if(!l.length)return"Day off";const p=span(l);return hm(p.s)+" \u2013 "+hm(p.e)+" \u00b7 "+dur(p.tot)}
 function draw(){
- $("tabs").innerHTML=[1,2,3,4,5,6].map(d=>`<button aria-pressed="${view===d}" class="${d===todayN?"today":""}" data-v="${d}">${DN[d]}</button>`).join("")+`<button aria-pressed="${view==="W"}" data-v="W">Week</button>`;
+ $("tabs").innerHTML=[1,2,3,4,5,6].map(d=>`<button aria-pressed="${view===d}" class="${d===todayN?"today":""}" data-v="${d}">${DN[d]}</button>`).join("")+`<button aria-pressed="${view==="W"}" data-v="W">Overview</button>`;
  $("out").innerHTML=view==="W"?[1,2,3,4,5,6].map(d=>`<h2>${FULL[d]} <small>${wk(d)}</small></h2>`+day(d,false)).join(""):`<h2>${FULL[view]}${view===todayN?" (today)":""}</h2>`+day(view,view===todayN)}
 $("tabs").onclick=e=>{const v=e.target.dataset.v;if(!v)return;view=v==="W"?"W":+v;set("v",v);draw()};
 $("b").onchange=e=>{set("b",e.target.value);draw()};$("s").onchange=e=>{set("s",e.target.value);draw()};
 draw();setInterval(draw,60000);
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
 </html>
