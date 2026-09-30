@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI5 Timetable · FY BTech 2026-27</title>
+<meta name="theme-color" content="#1d3a5f">
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--ink:#14202e;--mute:#5d6b7c;--line:#dde3ea;--navy:#1d3a5f;
+--th:#2f6fb5;--lab:#1f8a5b;--tut:#c7811a;--now:#fff4d6}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1720;--card:#182330;--ink:#e8eef5;--mute:#93a2b3;--line:#27364a;--navy:#0b1118;
+--th:#6ea8e8;--lab:#4cc08a;--tut:#e7a84a;--now:#3a3219}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 "Segoe UI",system-ui,-apple-system,sans-serif;padding-bottom:40px}
+header{background:var(--navy);color:#fff;padding:calc(18px + env(safe-area-inset-top,0px)) 16px 16px}
+.wrap{max-width:720px;margin:0 auto}
+h1{font-size:1.35rem;margin:0 0 2px;letter-spacing:-.01em}
+header p{margin:0;opacity:.75;font-size:.85rem}
+.pick{display:flex;gap:10px;margin-top:14px}
+.pick label{flex:1;font-size:.75rem;opacity:.85}
+select{width:100%;margin-top:3px;padding:9px 10px;border-radius:8px;border:0;font:inherit;background:#fff;color:#14202e}
+nav{position:sticky;top:0;background:var(--bg);z-index:2;border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;padding:10px 12px;overflow-x:auto}
+nav button{flex:1;min-width:48px;padding:8px 6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;font-size:.9rem;cursor:pointer}
+nav button[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+nav button.today{font-weight:700}
+button:focus-visible,select:focus-visible{outline:3px solid #f2b233;outline-offset:2px}
+main{padding:14px 12px}
+h2{font-size:1.05rem;margin:18px 4px 8px}
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--mute)}
+.c{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--k);border-radius:10px;padding:12px;margin-bottom:8px}
+.c.theory{--k:var(--th)}.c.lab{--k:var(--lab)}.c.tut{--k:var(--tut)}
+.c.now{background:var(--now)}
+.t{width:54px;flex:none;font-variant-numeric:tabular-nums;font-size:.85rem;color:var(--mute)}
+.t b{display:block;color:var(--ink);font-size:.95rem}
+.n{font-weight:600}
+.m{font-size:.85rem;color:var(--mute);margin-top:2px}
+.tag{display:inline-block;font-size:.7rem;padding:1px 7px;border-radius:99px;border:1px solid var(--k);color:var(--k);margin-left:6px;vertical-align:1px}
+.flag{font-size:.75rem;color:var(--k);font-weight:600;margin-bottom:2px}
+.sum{background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;margin-bottom:12px}.sum span{display:block;font-size:.8rem;opacity:.75;margin-top:2px}.gap{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}.gap.free{color:var(--lab);font-weight:600}h2 small{font-weight:400;font-size:.8rem;color:var(--mute);margin-left:6px}.lunch{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}
+footer{max-width:720px;margin:10px auto 0;padding:0 16px;font-size:.78rem;color:var(--mute)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>AI5 Timetable</h1>
+<p>FY BTech · Artificial Intelligence · Sem I 2026-27 · effective 28 Sep 2026</p>
+<div class="pick">
+<label>Practical batch<select id="b"><option>A51</option><option>A52</option><option>A53</option></select></label>
+<label>AI / EMOS batch<select id="s"><option>A5A</option><option>A5B</option></select></label>
+</div></div></header>
+<nav><div class="wrap" id="tabs"></div></nav>
+<main class="wrap" id="out"></main>
+<footer>Built from the official class-wise timetable (Format ACAD/DI/05). Check the original PDF if anything looks off.</footer>
+<script>
+const SUB={
+CLA:["Linear Algebra & Multivariable Calculus"],DELD:["Digital Electronics & Logic"],PFC:["Physics for Computing"],
+AI:["Artificial Intelligence"],EMOS:["Entrepreneurial Mindset & Opportunity Sensing"],CTP:["Computational Thinking & Programming"],
+LL:["Liberal Learning"],CS:["English for Communication"],MT:["Math Tutorial (CLAM)"],FL:["Foreign Language"]};
+const TEA={AS:"Azhar Shaikh",SK:"Sidhant Kulkarni",PG:"Prashant Ghule",MAK:"Mayura A. Kulkarni",MP:"Mrudula Patil",SS:"Sudarshan Sahane",
+DK:"Dipti Kale",NM:"Nimesh Momaya",YK:"Yogesh Khairnar",MPK:"Manish P. Khare",PS:"Priyanka Shitole",KS:"Krishna S.",SA:"SA"};
+const KIND={theory:"Lecture",lab:"Lab",tut:"Tutorial"};
+// [start,end,subject,type,room,teacher,audience]
+const D=[[],
+[["13:15","15:05","CTP","lab","LL","SA","A51"],["13:15","15:05","DELD","lab","CL4","SK","A52"],["13:15","15:05","CS","tut","TUT1","PS","A53"],["15:10","16:50","LL","theory","K101","DK","all"]],
+[["08:30","10:20","EMOS","tut","TUT1","NM","A5A"],["08:30","10:20","AI","lab","CL1","MAK","A5B"],["10:30","11:25","DELD","theory","K201","SK","all"],["11:25","12:20","MT","tut","TUT2","AS","A53"],["13:15","14:10","PFC","theory","K201","PG","all"],["14:10","15:05","CLA","theory","K201","AS","all"],["15:10","16:00","EMOS","theory","K201","MP","all"]],
+[["08:30","10:20","CTP","lab","CL3","SS","A53"],["08:30","10:20","DELD","lab","CL4","SK","A51"],["08:30","10:20","CS","lab","LL","PS","A52"],["10:30","11:25","CLA","theory","K201","AS","all"],["11:25","12:20","AI","theory","K201","MAK","all"],["13:15","15:05","CTP","lab","CL1","SS","A51"],["13:15","15:05","CTP","lab","CL2","SS","A52"],["13:15","15:05","CTP","lab","CL3","SS","A53"],["15:10","16:50","EMOS","tut","TUT2","YK","A5B"],["15:10","16:50","AI","lab","CL1","MAK","A5A"]],
+[["10:30","11:25","CLA","theory","K201","AS","all"],["11:25","12:20","DELD","theory","K201","SK","all"],["13:15","14:10","MT","tut","TUT1","AS","A51"],["14:10","15:05","MT","tut","TUT1","AS","A52"],["15:10","16:50","CTP","lab","CL1","SS","A52"],["15:10","16:50","DELD","lab","CL4","SK","A53"],["15:10","16:50","CS","lab","LL","KS","A51"]],
+[["08:30","10:20","CS","tut","TUT2","PS","A51"],["08:30","10:20","CS","tut","TUT1","KS","A52"],["10:30","11:25","CTP","theory","K201","SS","all"],["11:25","12:20","PFC","theory","K201","PG","all"],["13:15","15:05","PFC","lab","E023 (Main Campus)","MPK","A51"],["15:10","16:50","PFC","lab","E023 (Main Campus)","MPK","A52"],["15:10","16:50","PFC","lab","D008B (Main Campus)","PG","A53"]],
+[["10:30","12:20","FL","theory","D011 / D109 / D203","","all"]]];
+const DN=["","Mon","Tue","Wed","Thu","Fri","Sat"],FULL=["","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const $=id=>document.getElementById(id);
+const get=(k,d)=>{try{return localStorage.getItem(k)||d}catch(e){return d}},set=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+$("b").value=get("b","A51");$("s").value=get("s","A5A");
+const jd=new Date().getDay(),todayN=jd===0?0:jd;
+let sel=get("v",""),view=sel&&sel!=="W"?+sel:(todayN||1);if(sel==="W")view="W";
+const mins=t=>{const[a,b]=t.split(":");return +a*60+ +b};
+const fmt=t=>{let[h,m]=t.split(":");h=+h;return(h>12?h-12:h)+":"+m};
+function list(d){return D[d].filter(e=>e[6]==="all"||e[6]===$("b").value||e[6]===$("s").value).sort((a,b)=>mins(a[0])-mins(b[0]))}
+const dur=m=>{const h=Math.floor(m/60),r=m%60;return(h?h+"h":"")+(h&&r?" ":"")+(r?r+"m":"")};
+const hm=m=>fmt(Math.floor(m/60)+":"+String(m%60).padStart(2,"0"));
+function card(e,lab,now){
+ return `<div class="c ${e[3]}${now?" now":""}"><div class="t"><b>${fmt(e[0])}</b>${fmt(e[1])}</div><div>${lab?`<div class="flag">${lab}</div>`:""}<div class="n">${SUB[e[2]][0]}<span class="tag">${KIND[e[3]]}</span></div><div class="m">${e[2]} \u00b7 Room ${e[4]}${e[5]?" \u00b7 "+(TEA[e[5]]||e[5]):""}${e[6]!=="all"?" \u00b7 "+e[6]:""}</div></div></div>`}
+function span(l){let s=mins(l[0][0]),e=0,tot=0;l.forEach(x=>{const a=Math.max(mins(x[0]),e),b=mins(x[1]);if(b>a)tot+=b-a;e=Math.max(e,b)});return{s,e,tot}}
+function banner(l,live){
+ const p=span(l),n=new Date(),cur=n.getHours()*60+n.getMinutes();
+ const a=p.s>510?`Come late: first class at ${hm(p.s)}.`:"Early start: first class at 8:30.";
+ const z=p.e<1010?`Go home early: done by ${hm(p.e)}.`:`Day ends at ${hm(p.e)}.`;
+ return `<div class="sum"><b>${live&&cur>=p.e?"All done for today.":a+" "+z}</b><span>${dur(p.tot)} of classes${live&&cur>=p.e?"":""}</span></div>`}
+function day(d,live){
+ const l=list(d);if(!l.length)return `<div class="empty">Day off. No classes for your batches.</div>`;
+ const n=new Date(),cur=n.getHours()*60+n.getMinutes();
+ const nowE=live?l.find(e=>mins(e[0])<=cur&&cur<mins(e[1])):null;
+ const nxt=live&&!nowE?l.find(e=>mins(e[0])>cur):null;
+ let h=banner(l,live),pe=null;
+ l.forEach(e=>{const s=mins(e[0]);
+  if(pe!==null&&s-pe>=20)h+=(pe===740&&s===795)?`<div class="gap">Lunch break \u00b7 ${hm(pe)} \u2013 ${hm(s)}</div>`:`<div class="gap free">Free for ${dur(s-pe)} \u00b7 ${hm(pe)} \u2013 ${hm(s)}${pe<=740&&s>=795?" (includes lunch)":""}</div>`;
+  let lab="";if(e===nowE)lab=`Happening now \u00b7 ends in ${dur(mins(e[1])-cur)}`;else if(e===nxt)lab=`Up next \u00b7 starts in ${dur(s-cur)}`;
+  h+=card(e,lab,e===nowE);pe=Math.max(pe||0,mins(e[1]))});
+ return h}
+function wk(d){const l=list(d);if(!l.length)return"Day off";const p=span(l);return hm(p.s)+" \u2013 "+hm(p.e)+" \u00b7 "+dur(p.tot)}
+function draw(){
+ $("tabs").innerHTML=[1,2,3,4,5,6].map(d=>`<button aria-pressed="${view===d}" class="${d===todayN?"today":""}" data-v="${d}">${DN[d]}</button>`).join("")+`<button aria-pressed="${view==="W"}" data-v="W">Week</button>`;
+ $("out").innerHTML=view==="W"?[1,2,3,4,5,6].map(d=>`<h2>${FULL[d]} <small>${wk(d)}</small></h2>`+day(d,false)).join(""):`<h2>${FULL[view]}${view===todayN?" (today)":""}</h2>`+day(view,view===todayN)}
+$("tabs").onclick=e=>{const v=e.target.dataset.v;if(!v)return;view=v==="W"?"W":+v;set("v",v);draw()};
+$("b").onchange=e=>{set("b",e.target.value);draw()};$("s").onchange=e=>{set("s",e.target.value);draw()};
+draw();setInterval(draw,60000);
+</script>
+</body>
+</html>
