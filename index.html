@@ -41,7 +41,7 @@ h2{font-size:1.05rem;margin:18px 4px 8px}
 .m{font-size:.85rem;color:var(--mute);margin-top:2px}
 .tag{display:inline-block;font-size:.7rem;padding:1px 7px;border-radius:99px;border:1px solid var(--k);color:var(--k);margin-left:6px;vertical-align:1px}
 .flag{font-size:.75rem;color:var(--k);font-weight:600;margin-bottom:2px}
-.sum{background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;margin-bottom:12px}.sum span{display:block;font-size:.8rem;opacity:.75;margin-top:2px}.gap{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}.gap.free{color:var(--lab);font-weight:600}h2 small{font-weight:400;font-size:.8rem;color:var(--mute);margin-left:6px}.lunch{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}
+.sum{background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;margin-bottom:12px}.pills{display:flex;gap:6px;margin-bottom:8px}.pill{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:99px;background:#2f6fb5;color:#fff}.pill.g{background:#1f8a5b}.pill.a{background:#b9741a}.hd{font-size:1.2rem;font-weight:700;margin-bottom:12px}.bar{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.18);margin-bottom:12px;overflow:hidden}.bar i{position:absolute;top:0;bottom:0;background:#8fc2ff;border-radius:99px}.st{display:flex;gap:8px}.st div{flex:1;font-size:.72rem;opacity:.9}.st b{display:block;font-size:1rem}.hol{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 18px;text-align:center}.hol h3{margin:12px 0 4px;font-size:1.3rem}.hol p{margin:0 0 18px;color:var(--mute)}.hol button,.note button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:transparent;color:var(--th);border-radius:8px;padding:8px 12px;cursor:pointer}.note{font-size:.8rem;color:var(--mute);margin-bottom:10px}.note button{padding:3px 8px;margin-left:4px}.gap{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}.gap.free{color:var(--lab);font-weight:600}h2 small{font-weight:400;font-size:.8rem;color:var(--mute);margin-left:6px}.lunch{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}
 footer{max-width:720px;margin:10px auto 0;padding:0 16px;font-size:.78rem;color:var(--mute)}
 </style>
 </head>
@@ -55,7 +55,7 @@ footer{max-width:720px;margin:10px auto 0;padding:0 16px;font-size:.78rem;color:
 </div></div></header>
 <nav><div class="wrap" id="tabs"></div></nav>
 <main class="wrap" id="out"></main>
-<footer>Works offline after the first visit. Built from the official class-wise timetable (Format ACAD/DI/05). Check the original PDF if anything looks off.</footer>
+<footer>Works offline after the first visit. Holidays follow the central gazetted list. Built from the official class-wise timetable (Format ACAD/DI/05). Check the original PDF if anything looks off.</footer>
 <script>
 const SUB={
 CLA:["Linear Algebra & Multivariable Calculus"],DELD:["Digital Electronics & Logic"],PFC:["Physics for Computing"],
@@ -86,17 +86,22 @@ const hm=m=>fmt(Math.floor(m/60)+":"+String(m%60).padStart(2,"0"));
 function card(e,lab,now){
  return `<div class="c ${e[3]}${now?" now":""}"><div class="t"><b>${fmt(e[0])}</b>${fmt(e[1])}</div><div>${lab?`<div class="flag">${lab}</div>`:""}<div class="n">${SUB[e[2]][0]}<span class="tag">${KIND[e[3]]}</span></div><div class="m">${e[2]} \u00b7 Room ${e[4]}${e[5]?" \u00b7 "+(TEA[e[5]]||e[5]):""}${e[6]!=="all"?" \u00b7 "+e[6]:""}</div></div></div>`}
 function span(l){let s=mins(l[0][0]),e=0,tot=0;l.forEach(x=>{const a=Math.max(mins(x[0]),e),b=mins(x[1]);if(b>a)tot+=b-a;e=Math.max(e,b)});return{s,e,tot}}
+const HOL=["2026-10-02","2026-10-20","2026-11-08","2026-11-24","2026-12-25","2027-01-26"];
+let over=false;
+const iso=()=>{const n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")};
+const isHol=()=>HOL.includes(iso());
 function banner(l,live){
- const p=span(l),n=new Date(),cur=n.getHours()*60+n.getMinutes();
- const a=p.s>510?`Come late: first class at ${hm(p.s)}.`:"Early start: first class at 8:30.";
- const z=p.e<1010?`Go home early: done by ${hm(p.e)}.`:`Day ends at ${hm(p.e)}.`;
- return `<div class="sum"><b>${live&&cur>=p.e?"All done for today.":a+" "+z}</b><span>${dur(p.tot)} of classes${live&&cur>=p.e?"":""}</span></div>`}
+ const p=span(l),n=new Date(),cur=n.getHours()*60+n.getMinutes(),done=live&&cur>=p.e,late=p.s>510,early=p.e<1010;
+ const seg=l.map(x=>`<i style="left:${(mins(x[0])-510)/5.95}%;width:${(mins(x[1])-mins(x[0]))/5.95}%"></i>`).join("");
+ return `<div class="sum"><div class="pills"><span class="pill ${late?"g":"a"}">${late?"Late start":"Early start"}</span><span class="pill ${early?"g":"a"}">${early?"Early finish":"Full day"}</span></div><div class="hd">${done?"All lectures done for today":"First lecture at "+hm(p.s)}</div><div class="bar">${seg}</div><div class="st"><div><b>${hm(p.s)}</b>Starts</div><div><b>${hm(p.e)}</b>Ends</div><div><b>${dur(p.tot)}</b>of lectures</div></div></div>`}
 function day(d,live){
- const l=list(d);if(!l.length)return `<div class="empty">Day off. No classes for your batches.</div>`;
+ const hol=live&&isHol();
+ if(hol&&!over)return `<div class="hol"><span class="pill g">Public holiday</span><h3>No lectures today</h3><p>Enjoy the day off.</p><button id="mis">Is this a mistake? View the timetable</button></div>`;
+ const l=list(d);if(!l.length)return `<div class="empty">Day off. No lectures for your batches.</div>`;
  const n=new Date(),cur=n.getHours()*60+n.getMinutes();
  const nowE=live?l.find(e=>mins(e[0])<=cur&&cur<mins(e[1])):null;
  const nxt=live&&!nowE?l.find(e=>mins(e[0])>cur):null;
- let h=banner(l,live),pe=null;
+ let h=(hol?`<div class="note">Today is marked as a public holiday. <button id="unm">Hide timetable</button></div>`:"")+banner(l,live),pe=null;
  l.forEach(e=>{const s=mins(e[0]);
   if(pe!==null&&s-pe>=20)h+=(pe===740&&s===795)?`<div class="gap">Lunch break \u00b7 ${hm(pe)} \u2013 ${hm(s)}</div>`:`<div class="gap free">Free for ${dur(s-pe)} \u00b7 ${hm(pe)} \u2013 ${hm(s)}${pe<=740&&s>=795?" (includes lunch)":""}</div>`;
   if(pe!==null&&s>pe&&s-pe<20)h+=`<div class="gap">Short break \u00b7 ${s-pe} min \u00b7 ${hm(pe)} \u2013 ${hm(s)}</div>`;
@@ -105,9 +110,10 @@ function day(d,live){
  return h}
 function wk(d){const l=list(d);if(!l.length)return"Day off";const p=span(l);return hm(p.s)+" \u2013 "+hm(p.e)+" \u00b7 "+dur(p.tot)}
 function draw(){
- $("tabs").innerHTML=[1,2,3,4,5,6].map(d=>`<button aria-pressed="${view===d}" class="${d===todayN?"today":""}" data-v="${d}">${DN[d]}</button>`).join("")+`<button aria-pressed="${view==="W"}" data-v="W">Overview</button>`;
+ $("tabs").innerHTML=[1,2,3,4,5,6].map(d=>`<button aria-pressed="${view===d}" class="${d===todayN?"today":""}" data-v="${d}">${DN[d]}</button>`).join("")+`<button aria-pressed="${view==="W"}" data-v="W">Week</button>`;
  $("out").innerHTML=view==="W"?[1,2,3,4,5,6].map(d=>`<h2>${FULL[d]} <small>${wk(d)}</small></h2>`+day(d,false)).join(""):`<h2>${FULL[view]}${view===todayN?" (today)":""}</h2>`+day(view,view===todayN)}
 $("tabs").onclick=e=>{const v=e.target.dataset.v;if(!v)return;view=v==="W"?"W":+v;set("v",v);draw()};
+$("out").onclick=e=>{if(e.target.id==="mis"){over=true;draw()}if(e.target.id==="unm"){over=false;draw()}};
 $("b").onchange=e=>{set("b",e.target.value);draw()};$("s").onchange=e=>{set("s",e.target.value);draw()};
 draw();setInterval(draw,60000);
 if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
