@@ -41,14 +41,14 @@ h2{font-size:1.05rem;margin:18px 4px 8px}
 .m{font-size:.85rem;color:var(--mute);margin-top:2px}
 .tag{display:inline-block;font-size:.7rem;padding:1px 7px;border-radius:99px;border:1px solid var(--k);color:var(--k);margin-left:6px;vertical-align:1px}
 .flag{font-size:.75rem;color:var(--k);font-weight:600;margin-bottom:2px}
-.sum{background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;margin-bottom:12px}.pills{display:flex;gap:6px;margin-bottom:8px}.pill{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:99px;background:#2f6fb5;color:#fff}.pill.g{background:#1f8a5b}.pill.a{background:#b9741a}.hd{font-size:1.2rem;font-weight:700;margin-bottom:12px}.bar{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.18);margin-bottom:12px;overflow:hidden}.bar i{position:absolute;top:0;bottom:0;background:#8fc2ff;border-radius:99px}.st{display:flex;gap:8px}.st div{flex:1;font-size:.72rem;opacity:.9}.st b{display:block;font-size:1rem}.hol{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 18px;text-align:center}.hol h3{margin:12px 0 4px;font-size:1.3rem}.hol p{margin:0 0 18px;color:var(--mute)}.hol button,.note button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:transparent;color:var(--th);border-radius:8px;padding:8px 12px;cursor:pointer}.note{font-size:.8rem;color:var(--mute);margin-bottom:10px}.note button{padding:3px 8px;margin-left:4px}.gap{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}.gap.free{color:var(--lab);font-weight:600}h2 small{font-weight:400;font-size:.8rem;color:var(--mute);margin-left:6px}.lunch{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}
+.sum{background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;margin-bottom:12px}.pills{display:flex;gap:6px;margin-bottom:8px}.pill{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:99px;background:#2f6fb5;color:#fff}.pill.g{background:#1f8a5b}.pill.a{background:#b9741a}.hd{font-size:1.2rem;font-weight:700;margin-bottom:12px}.strip{display:flex;gap:8px;margin-bottom:14px}.g{min-width:0}.bl{display:flex;gap:3px}.bl i{flex:1;height:10px;border-radius:3px;background:rgba(255,255,255,.2)}.bl i.d{background:#3ddc97}.bl i.i{background:#8fc2ff}.bl i.n{background:linear-gradient(90deg,#ffd23f var(--p),rgba(255,255,255,.2) var(--p));animation:pl 1.6s ease-in-out infinite}@keyframes pl{50%{opacity:.6}}@media (prefers-reduced-motion:reduce){.bl i.n{animation:none}}.g span{display:block;margin-top:5px;font-size:.65rem;letter-spacing:.03em;text-align:center;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.st{display:flex;gap:8px}.st div{flex:1;font-size:.72rem;opacity:.9}.st b{display:block;font-size:1rem}.hol{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 18px;text-align:center}.hol h3{margin:12px 0 4px;font-size:1.3rem}.hol p{margin:0 0 18px;color:var(--mute)}.hol button,.note button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:transparent;color:var(--th);border-radius:8px;padding:8px 12px;cursor:pointer}.note{font-size:.8rem;color:var(--mute);margin-bottom:10px}.note button{padding:3px 8px;margin-left:4px}.gap{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}.gap.free{color:var(--lab);font-weight:600}h2 small{font-weight:400;font-size:.8rem;color:var(--mute);margin-left:6px}.lunch{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}
 footer{max-width:720px;margin:10px auto 0;padding:0 16px;font-size:.78rem;color:var(--mute)}
 </style>
 </head>
 <body>
 <header><div class="wrap">
 <h1>AI5 Timetable</h1>
-<p>FY BTech · Artificial Intelligence · Sem I 2026-27 · effective 28 Sep 2026</p>
+<p>FY BTech · Artificial Intelligence · Sem I 2026-27 · effective 5 Oct 2026</p>
 <div class="pick">
 <label>Practical batch<select id="b"><option>A51</option><option>A52</option><option>A53</option></select></label>
 <label>AI / EMOS batch<select id="s"><option>A5A</option><option>A5B</option></select></label>
@@ -58,19 +58,19 @@ footer{max-width:720px;margin:10px auto 0;padding:0 16px;font-size:.78rem;color:
 <footer>Works offline after the first visit. Holidays follow the central gazetted list. Built from the official class-wise timetable (Format ACAD/DI/05). Check the original PDF if anything looks off.</footer>
 <script>
 const SUB={
-CLA:["Linear Algebra & Multivariable Calculus"],DELD:["Digital Electronics & Logic"],PFC:["Physics for Computing"],
+LAMC:["Linear Algebra & Multivariable Calculus"],DELD:["Digital Electronics & Logic"],PFC:["Physics for Computing"],
 AI:["Artificial Intelligence"],EMOS:["Entrepreneurial Mindset & Opportunity Sensing"],CTP:["Computational Thinking & Programming"],
-LL:["Liberal Learning"],CS:["English for Communication"],MT:["Math Tutorial (CLAM)"],FL:["Foreign Language"]};
-const TEA={AS:"Azhar Shaikh",SK:"Sidhant Kulkarni",PG:"Prashant Ghule",MAK:"Mayura A. Kulkarni",MP:"Mrudula Patil",SS:"Sudarshan Sahane",
-DK:"Dipti Kale",NM:"Nimesh Momaya",YK:"Yogesh Khairnar",MPK:"Manish P. Khare",PS:"Priyanka Shitole",KS:"Krishna S.",SA:"SA"};
+LL:["Liberal Learning"],CS:["English for Communication"],MT:["Maths Tutorial"],FL:["Foreign Language"]};
+const TEA={AS:"Azhar Shaikh",SK:"Sidhant Kulkarni",PG:"Prashant Ghule",MAK:"Mayura A. Kulkarni",SP:"Satling Pujari",SS:"Sudarshan Sahane",
+DK:"Dipti Kale",NM:"Nimesh Momaya",YK:"Yogesh Khairnar",MK:"Manish P. Khare",PS:"Priyanka Shitole",KS:"Krishna S."};
 const KIND={theory:"Lecture",lab:"Lab",tut:"Tutorial"};
 // [start,end,subject,type,room,teacher,audience]
 const D=[[],
-[["13:15","15:05","CTP","lab","LL","SA","A51"],["13:15","15:05","DELD","lab","CL4","SK","A52"],["13:15","15:05","CS","tut","TUT1","PS","A53"],["15:10","16:50","LL","theory","K101","DK","all"]],
-[["08:30","10:20","EMOS","tut","TUT1","NM","A5A"],["08:30","10:20","AI","lab","CL1","MAK","A5B"],["10:30","11:25","DELD","theory","K201","SK","all"],["11:25","12:20","MT","tut","TUT2","AS","A53"],["13:15","14:10","PFC","theory","K201","PG","all"],["14:10","15:05","CLA","theory","K201","AS","all"],["15:10","16:00","EMOS","theory","K201","MP","all"]],
-[["08:30","10:20","CTP","lab","CL3","SS","A53"],["08:30","10:20","DELD","lab","CL4","SK","A51"],["08:30","10:20","CS","lab","LL","PS","A52"],["10:30","11:25","CLA","theory","K201","AS","all"],["11:25","12:20","AI","theory","K201","MAK","all"],["13:15","15:05","CTP","lab","CL1","SS","A51"],["13:15","15:05","CTP","lab","CL2","SS","A52"],["13:15","15:05","CTP","lab","CL3","SS","A53"],["15:10","16:50","EMOS","tut","TUT2","YK","A5B"],["15:10","16:50","AI","lab","CL1","MAK","A5A"]],
-[["10:30","11:25","CLA","theory","K201","AS","all"],["11:25","12:20","DELD","theory","K201","SK","all"],["13:15","14:10","MT","tut","TUT1","AS","A51"],["14:10","15:05","MT","tut","TUT1","AS","A52"],["15:10","16:50","CTP","lab","CL1","SS","A52"],["15:10","16:50","DELD","lab","CL4","SK","A53"],["15:10","16:50","CS","lab","LL","KS","A51"]],
-[["08:30","10:20","CS","tut","TUT2","PS","A51"],["08:30","10:20","CS","tut","TUT1","KS","A52"],["10:30","11:25","CTP","theory","K201","SS","all"],["11:25","12:20","PFC","theory","K201","PG","all"],["13:15","15:05","PFC","lab","E023 (Main Campus)","MPK","A51"],["15:10","16:50","PFC","lab","E023 (Main Campus)","MPK","A52"],["15:10","16:50","PFC","lab","D008B (Main Campus)","PG","A53"]],
+[["13:15","15:05","CTP","lab","LL","NM","A51"],["13:15","15:05","DELD","lab","CL4","SK","A52"],["13:15","15:05","CS","tut","TUT1","PS","A53"],["15:10","16:00","MT","tut","K101","AS","A51"],["16:00","16:50","MT","tut","K101","AS","A52"]],
+[["08:30","10:20","EMOS","tut","TUT1","SP","A5A"],["08:30","10:20","AI","lab","CL3","MAK","A5B"],["10:30","11:25","DELD","theory","K201","SK","all"],["11:25","12:20","MT","tut","TUT2","AS","A53"],["13:15","14:10","PFC","theory","K201","PG","all"],["14:10","15:05","LAMC","theory","K201","AS","all"],["15:10","16:00","EMOS","theory","K201","NBC","all"]],
+[["08:30","10:20","CTP","lab","CL3","SS","A53"],["08:30","10:20","DELD","lab","CL4","PV","A51"],["08:30","10:20","CS","lab","LL","PS","A52"],["10:30","11:25","LAMC","theory","K201","AS","all"],["11:25","12:20","AI","theory","K201","MAK","all"],["13:15","15:05","CTP","lab","CL1","SDP","A51"],["13:15","15:05","CTP","lab","CL2","SDP","A52"],["13:15","15:05","CTP","lab","CL3","SDP","A53"],["15:10","16:50","EMOS","tut","TUT2","YK","A5B"],["15:10","16:50","AI","lab","CL4","MAK","A5A"]],
+[["10:30","11:25","LAMC","theory","K201","AS","all"],["11:25","12:20","DELD","theory","K201","SK","all"],["13:15","15:05","LL","theory","K102","DK","all"],["15:10","16:50","CTP","lab","CL1","SS","A52"],["15:10","16:50","DELD","lab","CL4","SK","A53"],["15:10","16:50","CS","lab","LL","KS","A51"]],
+[["08:30","10:20","CS","tut","TUT2","PS","A51"],["08:30","10:20","CS","tut","TUT1","KS","A52"],["10:30","11:25","CTP","theory","K201","SS","all"],["11:25","12:20","PFC","theory","K201","PG","all"],["13:15","15:05","PFC","lab","E023 (Main Campus)","MK","A51"],["15:10","16:50","PFC","lab","E023 (Main Campus)","MK","A52"],["15:10","16:50","PFC","lab","D008B (Main Campus)","PG","A53"]],
 [["10:30","12:20","FL","theory","D011 / D109 / D203","","all"]]];
 const DN=["","Mon","Tue","Wed","Thu","Fri","Sat"],FULL=["","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const $=id=>document.getElementById(id);
@@ -91,13 +91,18 @@ let over=false;
 const iso=()=>{const n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")};
 const isHol=()=>HOL.includes(iso());
 function banner(l,live){
- const p=span(l),n=new Date(),cur=n.getHours()*60+n.getMinutes(),done=live&&cur>=p.e,late=p.s>510,early=p.e<1010;
- const seg=l.map(x=>`<i style="left:${(mins(x[0])-510)/5.95}%;width:${(mins(x[1])-mins(x[0]))/5.95}%"></i>`).join("");
- return `<div class="sum"><div class="pills"><span class="pill ${late?"g":"a"}">${late?"Late start":"Early start"}</span><span class="pill ${early?"g":"a"}">${early?"Early finish":"Full day"}</span></div><div class="hd">${done?"All lectures done for today":"First lecture at "+hm(p.s)}</div><div class="bar">${seg}</div><div class="st"><div><b>${hm(p.s)}</b>Starts</div><div><b>${hm(p.e)}</b>Ends</div><div><b>${dur(p.tot)}</b>of lectures</div></div></div>`}
+ const p=span(l),n=new Date(),cur=n.getHours()*60+n.getMinutes(),late=p.s>510,early=p.e<1010;
+ const dn=live?l.filter(x=>mins(x[1])<=cur).length:0,fin=live&&cur>=p.e;
+ const hd=!live||cur<p.s?"First lecture at "+hm(p.s):fin?"All lectures done for today":dn+" of "+l.length+" lectures done";
+ const grp=l.map(x=>{const s=mins(x[0]),e=mins(x[1]),k=Math.max(1,Math.round((e-s)/55)),w=(e-s)/k;let b="";
+  for(let i=0;i<k;i++){const a=s+i*w,z=a+w,st=!live?"i":cur>=z?"d":cur>=a?"n":"u";
+   b+=`<i class="${st}"${st==="n"?` style="--p:${Math.round((cur-a)/w*100)}%"`:""}></i>`}
+  return `<div class="g" style="flex:${k}"><div class="bl">${b}</div><span>${x[2]}</span></div>`}).join("");
+ return `<div class="sum"><div class="pills"><span class="pill ${late?"g":"a"}">${late?"Late start":"Early start"}</span><span class="pill ${early?"g":"a"}">${early?"Early finish":"Full day"}</span></div><div class="hd">${hd}</div><div class="strip">${grp}</div><div class="st"><div><b>${hm(p.s)}</b>Starts</div><div><b>${hm(p.e)}</b>Ends</div><div><b>${dur(p.tot)}</b>of lectures</div></div></div>`}
 function day(d,live){
  const hol=live&&isHol();
  if(hol&&!over)return `<div class="hol"><span class="pill g">Public holiday</span><h3>No lectures today</h3><p>Enjoy the day off.</p><button id="mis">Is this a mistake? View the timetable</button></div>`;
- const l=list(d);if(!l.length)return `<div class="empty">Day off. No lectures for your batches.</div>`;
+ const l=list(d);if(!l.length)return `<div class="empty">Day off. No classes for your batches.</div>`;
  const n=new Date(),cur=n.getHours()*60+n.getMinutes();
  const nowE=live?l.find(e=>mins(e[0])<=cur&&cur<mins(e[1])):null;
  const nxt=live&&!nowE?l.find(e=>mins(e[0])>cur):null;
