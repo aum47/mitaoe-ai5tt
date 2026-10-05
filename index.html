@@ -22,13 +22,13 @@ h1{font-size:1.35rem;margin:0 0 2px;letter-spacing:-.01em}
 header p{margin:0;opacity:.75;font-size:.85rem}
 .pick{display:flex;gap:10px;margin-top:14px}
 .pick label{flex:1;font-size:.75rem;opacity:.85}
-select{width:100%;margin-top:3px;padding:9px 10px;border-radius:8px;border:0;font:inherit;background:#fff;color:#14202e}
+select,input{width:100%;margin-top:3px;padding:9px 10px;border-radius:8px;border:0;font:inherit;background:#fff;color:#14202e}
 nav{position:sticky;top:0;background:var(--bg);z-index:2;border-bottom:1px solid var(--line)}
 nav .wrap{display:flex;gap:6px;padding:10px 12px;overflow-x:auto}
 nav button{flex:1;min-width:48px;padding:8px 6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;font-size:.9rem;cursor:pointer}
 nav button[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
 nav button.today{font-weight:700}
-button:focus-visible,select:focus-visible{outline:3px solid #f2b233;outline-offset:2px}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #f2b233;outline-offset:2px}
 main{padding:14px 12px}
 h2{font-size:1.05rem;margin:18px 4px 8px}
 .empty{background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--mute)}
@@ -43,6 +43,7 @@ h2{font-size:1.05rem;margin:18px 4px 8px}
 .flag{font-size:.75rem;color:var(--k);font-weight:600;margin-bottom:2px}
 .sum{background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;margin-bottom:12px}.pills{display:flex;gap:6px;margin-bottom:8px}.pill{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:99px;background:#2f6fb5;color:#fff}.pill.g{background:#1f8a5b}.pill.a{background:#b9741a}.hd{font-size:1.2rem;font-weight:700;margin-bottom:12px}.strip{display:flex;gap:8px;margin-bottom:14px}.g{min-width:0}.bl{display:flex;gap:3px}.bl i{flex:1;height:10px;border-radius:3px;background:rgba(255,255,255,.2)}.bl i.d{background:#3ddc97}.bl i.i{background:#8fc2ff}.bl i.n{background:linear-gradient(90deg,#ffd23f var(--p),rgba(255,255,255,.2) var(--p));animation:pl 1.6s ease-in-out infinite}@keyframes pl{50%{opacity:.6}}@media (prefers-reduced-motion:reduce){.bl i.n{animation:none}}.g span{display:block;margin-top:5px;font-size:.65rem;letter-spacing:.03em;text-align:center;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.st{display:flex;gap:8px}.st div{flex:1;font-size:.72rem;opacity:.9}.st b{display:block;font-size:1rem}.hol{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 18px;text-align:center}.hol h3{margin:12px 0 4px;font-size:1.3rem}.hol p{margin:0 0 18px;color:var(--mute)}.hol button,.note button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:transparent;color:var(--th);border-radius:8px;padding:8px 12px;cursor:pointer}.note{font-size:.8rem;color:var(--mute);margin-bottom:10px}.note button{padding:3px 8px;margin-left:4px}.gap{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}.gap.free{color:var(--lab);font-weight:600}h2 small{font-weight:400;font-size:.8rem;color:var(--mute);margin-left:6px}.lunch{text-align:center;font-size:.8rem;color:var(--mute);margin:2px 0 8px}
 footer{max-width:720px;margin:10px auto 0;padding:0 16px;font-size:.78rem;color:var(--mute)}
+.nrow{align-items:end}#nb{flex:none;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;font:inherit;font-size:.85rem;cursor:pointer}#nmsg{font-size:.75rem;opacity:.85;margin:8px 0 0}#nmsg:empty{display:none}#toast{position:fixed;z-index:9;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));max-width:696px;margin:0 auto;background:#14202e;color:#fff;border-left:5px solid #ffd23f;border-radius:10px;padding:12px 14px;white-space:pre-line;box-shadow:0 6px 24px rgba(0,0,0,.35);font-size:.9rem;cursor:pointer}#toast[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -52,33 +53,20 @@ footer{max-width:720px;margin:10px auto 0;padding:0 16px;font-size:.78rem;color:
 <div class="pick">
 <label>Practical batch<select id="b"><option>A51</option><option>A52</option><option>A53</option></select></label>
 <label>AI / EMOS batch<select id="s"><option>A5A</option><option>A5B</option></select></label>
-</div></div></header>
+</div>
+<div class="pick nrow"><label>Your name<input id="nm" maxlength="24" placeholder="For alerts" autocomplete="given-name"></label><button id="nb" type="button">Turn on alerts</button></div><p id="nmsg"></p></div></header>
+<div id="toast" role="alert" hidden></div>
 <nav><div class="wrap" id="tabs"></div></nav>
 <main class="wrap" id="out"></main>
 <footer>Works offline after the first visit. Holidays follow the central gazetted list. Built from the official class-wise timetable (Format ACAD/DI/05). Check the original PDF if anything looks off.</footer>
+<script src="data.js"></script>
 <script>
-const SUB={
-LAMC:["Linear Algebra & Multivariable Calculus"],DELD:["Digital Electronics & Logic"],PFC:["Physics for Computing"],
-AI:["Artificial Intelligence"],EMOS:["Entrepreneurial Mindset & Opportunity Sensing"],CTP:["Computational Thinking & Programming"],
-LL:["Liberal Learning"],CS:["English for Communication"],MT:["Maths Tutorial"],FL:["Foreign Language"]};
-const TEA={AS:"Azhar Shaikh",SK:"Sidhant Kulkarni",PG:"Prashant Ghule",MAK:"Mayura A. Kulkarni",SP:"Satling Pujari",SS:"Sudarshan Sahane",
-DK:"Dipti Kale",NM:"Nimesh Momaya",YK:"Yogesh Khairnar",MK:"Manish P. Khare",PS:"Priyanka Shitole",KS:"Krishna S."};
-const KIND={theory:"Lecture",lab:"Lab",tut:"Tutorial"};
-// [start,end,subject,type,room,teacher,audience]
-const D=[[],
-[["13:15","15:05","CTP","lab","LL","NM","A51"],["13:15","15:05","DELD","lab","CL4","SK","A52"],["13:15","15:05","CS","tut","TUT1","PS","A53"],["15:10","16:00","MT","tut","K101","AS","A51"],["16:00","16:50","MT","tut","K101","AS","A52"]],
-[["08:30","10:20","EMOS","tut","TUT1","SP","A5A"],["08:30","10:20","AI","lab","CL3","MAK","A5B"],["10:30","11:25","DELD","theory","K201","SK","all"],["11:25","12:20","MT","tut","TUT2","AS","A53"],["13:15","14:10","PFC","theory","K201","PG","all"],["14:10","15:05","LAMC","theory","K201","AS","all"],["15:10","16:00","EMOS","theory","K201","NBC","all"]],
-[["08:30","10:20","CTP","lab","CL3","SS","A53"],["08:30","10:20","DELD","lab","CL4","PV","A51"],["08:30","10:20","CS","lab","LL","PS","A52"],["10:30","11:25","LAMC","theory","K201","AS","all"],["11:25","12:20","AI","theory","K201","MAK","all"],["13:15","15:05","CTP","lab","CL1","SDP","A51"],["13:15","15:05","CTP","lab","CL2","SDP","A52"],["13:15","15:05","CTP","lab","CL3","SDP","A53"],["15:10","16:50","EMOS","tut","TUT2","YK","A5B"],["15:10","16:50","AI","lab","CL4","MAK","A5A"]],
-[["10:30","11:25","LAMC","theory","K201","AS","all"],["11:25","12:20","DELD","theory","K201","SK","all"],["13:15","15:05","LL","theory","K102","DK","all"],["15:10","16:50","CTP","lab","CL1","SS","A52"],["15:10","16:50","DELD","lab","CL4","SK","A53"],["15:10","16:50","CS","lab","LL","KS","A51"]],
-[["08:30","10:20","CS","tut","TUT2","PS","A51"],["08:30","10:20","CS","tut","TUT1","KS","A52"],["10:30","11:25","CTP","theory","K201","SS","all"],["11:25","12:20","PFC","theory","K201","PG","all"],["13:15","15:05","PFC","lab","E023 (Main Campus)","MK","A51"],["15:10","16:50","PFC","lab","E023 (Main Campus)","MK","A52"],["15:10","16:50","PFC","lab","D008B (Main Campus)","PG","A53"]],
-[["10:30","12:20","FL","theory","D011 / D109 / D203","","all"]]];
 const DN=["","Mon","Tue","Wed","Thu","Fri","Sat"],FULL=["","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const $=id=>document.getElementById(id);
 const get=(k,d)=>{try{return localStorage.getItem(k)||d}catch(e){return d}},set=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 $("b").value=get("b","A51");$("s").value=get("s","A5A");
 const jd=new Date().getDay(),todayN=jd===0?0:jd;
 let sel=get("v",""),view=sel&&sel!=="W"?+sel:(todayN||1);if(sel==="W")view="W";
-const mins=t=>{const[a,b]=t.split(":");return +a*60+ +b};
 const fmt=t=>{let[h,m]=t.split(":");h=+h;return(h>12?h-12:h)+":"+m};
 function list(d){return D[d].filter(e=>e[6]==="all"||e[6]===$("b").value||e[6]===$("s").value).sort((a,b)=>mins(a[0])-mins(b[0]))}
 const dur=m=>{const h=Math.floor(m/60),r=m%60;return(h?h+"h":"")+(h&&r?" ":"")+(r?r+"m":"")};
@@ -86,7 +74,6 @@ const hm=m=>fmt(Math.floor(m/60)+":"+String(m%60).padStart(2,"0"));
 function card(e,lab,now){
  return `<div class="c ${e[3]}${now?" now":""}"><div class="t"><b>${fmt(e[0])}</b>${fmt(e[1])}</div><div>${lab?`<div class="flag">${lab}</div>`:""}<div class="n">${SUB[e[2]][0]}<span class="tag">${KIND[e[3]]}</span></div><div class="m">${e[2]} \u00b7 Room ${e[4]}${e[5]?" \u00b7 "+(TEA[e[5]]||e[5]):""}${e[6]!=="all"?" \u00b7 "+e[6]:""}</div></div></div>`}
 function span(l){let s=mins(l[0][0]),e=0,tot=0;l.forEach(x=>{const a=Math.max(mins(x[0]),e),b=mins(x[1]);if(b>a)tot+=b-a;e=Math.max(e,b)});return{s,e,tot}}
-const HOL=["2026-10-02","2026-10-20","2026-11-08","2026-11-24","2026-12-25","2027-01-26"];
 let over=false;
 const iso=()=>{const n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")};
 const isHol=()=>HOL.includes(iso());
@@ -119,7 +106,41 @@ function draw(){
  $("out").innerHTML=view==="W"?[1,2,3,4,5,6].map(d=>`<h2>${FULL[d]} <small>${wk(d)}</small></h2>`+day(d,false)).join(""):`<h2>${FULL[view]}${view===todayN?" (today)":""}</h2>`+day(view,view===todayN)}
 $("tabs").onclick=e=>{const v=e.target.dataset.v;if(!v)return;view=v==="W"?"W":+v;set("v",v);draw()};
 $("out").onclick=e=>{if(e.target.id==="mis"){over=true;draw()}if(e.target.id==="unm"){over=false;draw()}};
-$("b").onchange=e=>{set("b",e.target.value);draw()};$("s").onchange=e=>{set("s",e.target.value);draw()};
+$("b").onchange=e=>{set("b",e.target.value);draw();saveCfg();tick()};$("s").onchange=e=>{set("s",e.target.value);draw();saveCfg();tick()};
+const PUSH={worker:"https://ai5-push.dumdumbpr.workers.dev/",key:"BKJFh97BHTNsnVEKNnreKMwtEcDq8KJbYvFrawJpwtsIk9c2tNxClWOukNlaKiNow8LJwRLeEZiUSIHn4O5OppY"};
+const u8=s=>Uint8Array.from(atob(s.replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));
+const cfgNow=()=>({b:$("b").value,s:$("s").value,name:get("name","")});
+const say=t=>{$("nmsg").textContent=t};
+const post=(p,o)=>fetch(PUSH.worker+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});
+const getSub=async()=>(await navigator.serviceWorker.ready).pushManager.getSubscription();
+async function saveCfg(){
+ try{await(await caches.open("ai5-cfg")).put("cfg.json",new Response(JSON.stringify(cfgNow())))}catch(e){}
+ if(!PUSH.worker||get("push","")!=="1")return;
+ try{const sub=await getSub(),c=cfgNow();if(sub)await post("/sub",{endpoint:sub.endpoint,b:c.b,s:c.s})}catch(e){}}
+function toast(a){const t=$("toast");t.textContent=a.title+"\n"+a.body;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>{t.hidden=true},15000)}
+function tick(){
+ const a=alertFor(cfgNow(),new Date());if(!a)return;
+ const k="sent:"+a.tag;if(get(k,""))return;set(k,"1");toast(a);
+ if(get("notif","")==="1"&&get("push","")!=="1"&&"Notification"in window&&Notification.permission==="granted")
+  navigator.serviceWorker.ready.then(r=>r.showNotification(a.title,{body:a.body,tag:a.tag,icon:"icon-192.png"}))}
+function paint(){const on=get("notif","")==="1"&&"Notification"in window&&Notification.permission==="granted";$("nb").textContent=on?"Turn off alerts":"Turn on alerts";$("nb").dataset.on=on?"1":""}
+$("nm").value=get("name","");
+$("nm").onchange=e=>{set("name",e.target.value.trim());saveCfg()};
+$("toast").onclick=()=>{$("toast").hidden=true};
+$("nb").onclick=async()=>{
+ if($("nb").dataset.on){
+  set("notif","0");set("push","");
+  try{const sub=await getSub();if(sub){if(PUSH.worker)post("/unsub",{endpoint:sub.endpoint}).catch(()=>{});await sub.unsubscribe()}}catch(e){}
+  say("Alerts are off.");paint();return}
+ if(!("Notification"in window)){say("This browser can't show notifications. On iPhone, add the app to your Home Screen first.");return}
+ if(await Notification.requestPermission()!=="granted"){say("Notifications are blocked. Allow them in your browser or phone settings.");return}
+ set("notif","1");set("name",$("nm").value.trim());let bg=false;
+ if(PUSH.worker&&PUSH.key&&"PushManager"in window)try{const reg=await navigator.serviceWorker.ready;await(await reg.pushManager.getSubscription()||reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(PUSH.key)}));set("push","1");bg=true}catch(e){}
+ await saveCfg();
+ say(bg?"Alerts on. You'll get a reminder 10 min before every lecture, even when the app is closed.":"Alerts on while the app is open. Alerts with the app closed need the push server (see setup).");
+ paint();tick()};
+paint();saveCfg();tick();setInterval(tick,20000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick()});
 draw();setInterval(draw,60000);
 if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
