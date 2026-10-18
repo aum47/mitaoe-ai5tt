@@ -1,5 +1,5 @@
 importScripts("data.js");
-const C="ai5-tt-v5",F=["./","./index.html","./data.js","./manifest.webmanifest","./icon-192.png","./icon-512.png"];
+const C="ai5-tt-v6",F=["./","./index.html","./data.js","./manifest.webmanifest","./icon-192.png","./icon-512.png"];
 const cfgGet=async()=>{const r=await(await caches.open("ai5-cfg")).match("cfg.json");return r?r.json():null};
 self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(F)));self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x.startsWith("ai5-tt-")&&x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
@@ -7,7 +7,7 @@ self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWi
 // Every push MUST show a notification, otherwise browsers throttle or drop the subscription.
 self.addEventListener("push",e=>e.waitUntil((async()=>{
     const cfg=(await cfgGet())||{b:"A51",s:"A5A"};
-    const a=alertFor(cfg,new Date())||{tag:"alerts-ok",title:"✅ Alerts are working",body:"You'll get a reminder 10 min before each of your lectures."};
+    const a=alertFor(cfg,new Date(),5)||{tag:"alerts-ok",title:"✅ Alerts are working",body:"You'll get a reminder 10 min before each of your lectures."};
     await self.registration.showNotification(a.title,{body:a.body,tag:a.tag,icon:"icon-192.png",badge:"icon-192.png",vibrate:[200,100,200]});
 })()));
 // If the browser rotates/expires the push subscription, quietly renew it and tell the server.
